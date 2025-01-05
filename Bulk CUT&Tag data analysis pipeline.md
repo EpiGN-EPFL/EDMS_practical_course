@@ -1,4 +1,6 @@
-The data processing and analysis outline is here: [[Bulk CUT&Tag data analysis chart.canvas|Bulk CUT&Tag data analysis chart]]
+The data processing and analysis outline is here:
+<img src="bulk_Cut&Tag_flowchart.png" align="centre" /><br/><br/>
+
 ## Step 0 - Quality control 
 
 Assuming we already have the FASTQ files from the sequencing facility, what can we do with the data?
