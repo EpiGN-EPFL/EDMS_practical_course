@@ -11,7 +11,7 @@ Assuming we already have the FASTQ files from the sequencing facility, what can 
 If you want to do the QC by yourself, you can use the pre-installed modules on the uni's [high-computing clusters](https://scitas-doc.epfl.ch) :) 
 
 ---
-**Now we start with the sequencing results: the FASTQ files. The following steps can give you an overview of what we are doing and why we are doing them. These might seem like a lot, but [snakePipes](https://snakepipes.readthedocs.io/en/stable/index.html) nicely compiled them and we will learn how to use it in the [[#Step 0-4 snakePipes]].** 
+**Now we start with the sequencing results: the FASTQ files. The following steps can give you an overview of what we are doing and why we are doing them. These might seem like a lot, but [snakePipes](https://snakepipes.readthedocs.io/en/stable/index.html) nicely compiled them and we will learn how to use it in this [section](#step-0-4-snakepipes).** 
 ## Step 1 - Alignment 
 
 By mapping these reads to a reference genome, we can determine where in the genome our library is derived from. Several things we need to decide for alignment:
