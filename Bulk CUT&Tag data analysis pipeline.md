@@ -116,7 +116,7 @@ If you notice something is off, maybe try these following QC/troubleshoot:
 
 Once we have the environment and reference genome ready, we are ready to run one of the pipelines. [DNAmapping](https://snakepipes.readthedocs.io/en/stable/content/workflows/DNAmapping.html) covers the first few steps of both ChIPseq and ATACseq pipelines (alignment, filtering and conversion to BigWig files), while the other two include additional peak calling and differential peak analysis. In practice, we often use DNAmapping to have a flexible downstream analysis. 
 
-DNAmapping also offers some visualisation and QC when the number of samples are less than 10. Check [[#Step 4 - Visualisation & QC]] for more of what we can do :)
+DNAmapping also offers some visualisation and QC when the number of samples are less than 10. Check previous step 4 for more of what we can do :)
 
 ---
 **The following lists some common downstream analysis we can do. It is again case-specific: what questions do we want to answer?**
