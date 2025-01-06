@@ -181,3 +181,5 @@ txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 Once we have the database ready, we can use the function `annotatePeak` following the instructions [here](https://www.bioconductor.org/packages/devel/bioc/vignettes/ChIPseeker/inst/doc/ChIPseeker.html#peak-annotation). 
 
 **(optional)** Another popular yet more advanced way to do functional annotation is [ChromHMM](https://ernstlab.github.io/ChromHMM/), which can use various histone modifications to discovery the major re-occuring combinations of markers. Check the [manual](https://ernstlab.github.io/ChromHMM/ChromHMM_manual.pdf) to see what how the software can `LearnModel` with in-house dataset. Alternatively, we can use the command `OverlapEnrichment` to overlap our results to a pre-trained model (such as models provided on [NIH Roadmap Epigenomics Mapping Consortium](https://egg2.wustl.edu/roadmap/web_portal/chr_state_learning.html#core_15state) , and this [full stack model](https://github.com/ernstlab/full_stack_ChromHMM_annotations) trained with over 1000 datasets).
+
+# test 
