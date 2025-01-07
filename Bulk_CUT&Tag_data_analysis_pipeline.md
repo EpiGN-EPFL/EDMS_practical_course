@@ -13,7 +13,7 @@ Assuming we already have the FASTQ files from the sequencing facility, what can 
 If you want to perform the QC yourself, you can use the pre-installed modules on the uni's [high-computing clusters](https://scitas-doc.epfl.ch) :) 
 
 ---
-The following steps will guide you through the processing of your sequencing data, giving you a clear understanding of what we are doing and why each step is important. While the workflow might seem overwhelming at first, tools like [snakePipes](https://snakepipes.readthedocs.io/en/stable/index.html) have simplified and streamlined these processes. In this [section](#part-1-2-snakepipes), we will explore how to use snakePipes to efficiently manage and analyze your data.
+The following steps will guide you through the processing of your sequencing data, giving you a clear understanding of what we are doing and why each step is important. While the workflow might seem overwhelming at first, tools like [snakePipes](https://snakepipes.readthedocs.io/en/stable/index.html) have simplified and streamlined these processes. In the section [Part 1 & 2 - snakePipes](#part-1--2---snakepipes), we will explore how to use snakePipes to efficiently manage and analyze your data.
 ## Part 1 - Starting with the Sequencing Results: The FASTQ Files
 
 ### Step 1 - Alignment 
@@ -156,7 +156,7 @@ computeMatrix reference-point -S coverage.bigwig -R regions.bed -o matrix.gz
 plotHeatmap -m matrix.gz -o heatmap.png
 ```
 
-- Input: regions.bed can be the peaks called from [Step 3.2](#Step-3-2-Peak-Calling ).
+- Input: regions.bed can be the peaks called from [peak calling step](#step-2--peak-calling).
 - Output: The heatmap visualizes how well the peaks correspond to expected signals.
 	- For example, regions enriched with **H3K27me3** should exhibit low **H3K27ac** signals.
 
