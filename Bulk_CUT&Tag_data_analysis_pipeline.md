@@ -51,7 +51,7 @@ Other tools like [**Sambamba**](https://lomereiter.github.io/sambamba/) can also
 ---
 ## Part 2 - BAM files
 
-### Step 3.1 - Generating Coverage Files 
+### Step 1 - Generating Coverage Files 
 
 To visualise alignment results, BAM files can be loaded into tools like [IGV](https://www.igv.org) (Integrated Genomics Viewer). **Important:** Ensure you select the correct reference genome before loading. Zooming in on the IGV interface allows inspection of nucleotide sequences, mapping quality, and other alignment details.
 
@@ -79,7 +79,7 @@ bamCoverage -b reads.bam --scaleFactor n -o coverage.bw
 ```
 
 **Note:** `py-deepTools` is also pre-compiled in the HPC :)
-### Step 3.2 - Peak Calling 
+### Step 2 - Peak Calling 
 
 BigWig files loaded into IGV display histograms with wave-like patterns, corresponding to read coverage across the genome. [**Peak calling**](https://en.wikipedia.org/wiki/Peak_calling) is a computational method used to identify regions with high signals (enriched read alignment). 
 
@@ -328,11 +328,11 @@ For additional or complementary annotation, consider these tools:
 - [**HOMER**](http://homer.ucsd.edu/homer/)**:** For motif enrichment and functional annotation.
 - [**GREAT**](http://great.stanford.edu/public/html/)**:** For associating non-coding genomic regions with regulatory functions.
 
-#### (Optional) Advanced Functional Annotation with ChromHMM
+### (Optional) Advanced Functional Annotation with ChromHMM
 
 [ChromHMM](https://ernstlab.github.io/ChromHMM/) is a powerful tool for functional annotation that utilises combinations of histone modifications to identify major recurring patterns or chromatin states across the genome. 
 
-##### De novo chromatin state discovery using your own datasets.
+#### De novo chromatin state discovery using your own datasets.
 
 You can train a model with your in-house histone modification datasets to uncover combinatorial patterns. Use the LearnModel command as described in the [ChromHMM manual](https://ernstlab.github.io/ChromHMM/ChromHMM_manual.pdf):
 ```
@@ -347,7 +347,7 @@ Some explanations:
   
 This approach identifies functional genomic regions (e.g., promoters, enhancers, repressive regions) based on your own experimental data.
 
-##### Annotation of datasets by overlapping results with pre-trained models.
+#### Annotation of datasets by overlapping results with pre-trained models.
 
 ChromHMM provides pre-trained chromatin state models for many cell types and tissues, such as:
 - The **15-state core model** from the [NIH Roadmap Epigenomics Mapping Consortium](https://egg2.wustl.edu/roadmap/web_portal/chr_state_learning.html#core_15state).
