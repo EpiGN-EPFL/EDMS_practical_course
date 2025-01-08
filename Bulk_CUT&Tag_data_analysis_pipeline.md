@@ -1,7 +1,7 @@
 The data processing and analysis outline is here:
 <img src="bulk_Cut&Tag_flowchart.png" align="centre" /><br/><br/>
 
-## Step 0 - Quality control 
+## Step 0 - Quality Control 
 
 Assuming we already have the FASTQ files from the sequencing facility, what can we do with the data?
 
@@ -13,7 +13,7 @@ Assuming we already have the FASTQ files from the sequencing facility, what can 
 If you want to perform the QC yourself, you can use the pre-installed modules on the uni's [high-computing clusters](https://scitas-doc.epfl.ch) :) 
 
 ---
-The following steps will guide you through the processing of your sequencing data, giving you a clear understanding of what we are doing and why each step is important. While the workflow might seem overwhelming at first, tools like [snakePipes](https://snakepipes.readthedocs.io/en/stable/index.html) have simplified and streamlined these processes. In the section [Part 1 & 2 - snakePipes](#part-1--2---snakepipes), we will explore how to use snakePipes to efficiently manage and analyze your data.
+The following steps will guide you through the processing of your sequencing data, giving you a clear understanding of what we are doing and why each step is important. While the workflow might seem overwhelming at first, tools like [snakePipes](https://snakepipes.readthedocs.io/en/stable/index.html) have simplified and streamlined these processes. In the section [Part 1 & 2 - snakePipes](#part-1--2---snakepipes), we will explore how to use snakePipes to efficiently manage and analyse your data.
 ## Part 1 - Starting with the Sequencing Results: The FASTQ Files
 
 ### Step 1 - Alignment 
@@ -49,7 +49,7 @@ Alignment tools typically output files in [**SAM**](https://en.wikipedia.org/wik
 Other tools like [**Sambamba**](https://lomereiter.github.io/sambamba/) can also handle BAM file operations efficiently and may offer additional functionalities for specific tasks.
 
 ---
-## Part 2 - BAM files
+## Part 2 - BAM Files
 
 ### Step 1 - Generating Coverage Files 
 
@@ -61,7 +61,7 @@ While BAM files retain detailed information, they are still large. To make them 
 bamCoverage -b reads.bam -o coverage.bw
 ```
 
-#### (optional) Spike-in normalisation. 
+#### (optional) Spike-in Normalisation. 
 
 There are different options for read coverage normalisation. If spike-ins were used, we can normalise by the number of reads mapped to spike-in genome.
 
@@ -111,6 +111,20 @@ conda create -n snakePipes -c mpi-ie -c conda-forge -c bioconda snakePipes
 conda activate snakePipes
 ```
 
+**NOTE:** snakePipes is under active development and maintenance. In case you'd like a development version:
+
+```
+git clone git@github.com:maxplanck-ie/snakepipes.git  
+cd snakepipes 
+pip install .
+```
+
+Check the snakePipes version using:
+
+```
+snakePipes version 
+```
+
 Run the following command to display the location of the global configuration file:
 ```
 snakePipes info
@@ -120,6 +134,7 @@ Locate the configuration files and update the paths **to the actual directory**:
 
 - config.yaml **(Conda Prefix):**
 	- Update the conda-prefix in: /PATH/TO/snakePipes/shared/profiles/local/config.yaml
+	- **(Optional)**: You can also change the `core` flag so the jobs in each pipeline can run in parallel. 
 - defaults.yaml **(Temporary Directory):**
 	- Update the tempDir in: /PATH/TO/snakePipes/shared/defaults.yaml
 
@@ -129,7 +144,11 @@ Create other conda environments specific to each pipeline by running:
 snakePipes createEnvs
 ```
 
-**Tips**: this might take some time. 
+**Tips**: This might take some time. These new environment will be in the conda prefix you defined previously. You can check their locations by:
+
+```
+snakePipes envInfo
+```
 
 ### Step 2 - Preparing the Reference Genome
 
@@ -141,9 +160,52 @@ Reference genome by one of these 2 options:
 Once we have the environment and reference genome ready, we are ready to run one of the pipelines.
 
 ### Step 3 - Run the Pipeline
-[DNAmapping](https://snakepipes.readthedocs.io/en/stable/content/workflows/DNAmapping.html) covers the first few steps of both ChIPseq and ATACseq pipelines (alignment, filtering and conversion to BigWig files), while the other two include additional peak calling and differential peak analysis. In practice, we often use DNAmapping to have a flexible downstream analysis. 
+The [DNAmapping](https://snakepipes.readthedocs.io/en/stable/content/workflows/DNAmapping.html) pipeline handles the initial steps of both ChIP-seq and ATAC-seq analysis (alignment, filtering and conversion to BigWig files). While other pipelines include additional steps such as **peak calling** and **differential peak analysis**, DNAmapping is often preferred for flexible downstream analysis.
 
-*todo:* fix the conda issue and give a sample code 
+```
+DNAmapping -i INDIR -o OUTDIR \
+	--reads R1_001 R2_001 \ 
+	hg38_lambda
+```
+
+The sample code has these basic arguments:
+- `-i`: input directory with **all the FASTQ files.** Ensure all sequencing results are in one folder.
+- `-o`: output directory.
+- `--reads`: Suffix used to denote reads 1 and 2 for paired-end data (e.g., R1_001 and R2_001).
+- `GENOME`: Genome acronym of the target organism. In this example, a **hybrid genome** (hg38_lambda) is used. Indices for this genome were created with `createIndices`.
+
+The output directory will have this output structure:
+```
+.
+├── bamCoverage
+├── Bowtie2
+├── deepTools_qc
+│   ├── bamPEFragmentSize
+│   ├── estimateReadFiltering
+│   ├── multiBamSummary
+│   ├── plotCorrelation
+│   ├── plotCoverage
+│   └── plotPCA
+├── FASTQ
+├── FastQC
+├── filtered_bam
+├── multiQC
+│   └── multiqc_data
+└── Sambamba
+```
+
+As we can see, it covers the main steps we mentioned above and additional QC provided by deepTools (more details in part 3).
+
+**Important Notes:**
+
+1. **Configuration Setup:**
+snakePipes is configured for **local execution** (e.g., changes made to /local/config.yaml). However, we will submit this job to a HPC cluster (it is not recommended to run alignment use your own computer)
+
+2. **Submitting to a Cluster:**
+For EPFL users, refer to the [SCITAS User Document](https://scitas-doc.epfl.ch/user-guide/using-clusters/running-jobs/) for detailed instructions on submitting jobs with SLURM.
+
+3. **Cluster Resources:**
+Ensure the `--ntasks` option in the `sbatch` command is **greater than or equal to** the core setting in /local/config.yaml to allow sufficient resources for the job to run.
 
 ---
 
@@ -164,7 +226,7 @@ If the heatmap reveals inconsistencies or unexpected results, consider performin
   
 ### Step 2 - QC and Troubleshooting
 
-#### Fraction of reads in peaks ([FRiP](https://www.encodeproject.org/data-standards/terms/#enrichment))
+#### Fraction of Reads in Peaks ([FRiP](https://www.encodeproject.org/data-standards/terms/#enrichment))
 
 A high signal-to-noise ratio should result in a significant fraction of reads mapping to peaks. There are many tools to calculate FRiP, one of which is [`featureCounts`](https://subread.sourceforge.net/featureCounts.html) from `subread` packages:
 ```
@@ -175,7 +237,7 @@ awk 'BEGIN{FS=OFS="\t"; print "GeneID\tChr\tStart\tEnd\tStrand"}{print $4, $1, $
 featureCounts -p -a eaks.saf -F SAF -o readCountInPeaks.txt reads.bam
 ```
 **Note:** SAF uses 1-based coordinates, while BED is 0-based. The awk command adjusts this difference.
-#### Replicates correlation
+#### Replicates Correlation
 To check for outliers among replicates, calculate correlations using deepTools:
 ```
 # from BAM files
@@ -190,14 +252,14 @@ plotPCA -in results.npz -o pca.png
 ```
 Essentially [multiBamSummary](https://deeptools.readthedocs.io/en/develop/content/tools/multiBamSummary.html) or [multiBigwigSummary](https://deeptools.readthedocs.io/en/develop/content/tools/multiBigwigSummary.html) calculates the coverage on a binned genome or a given region (in BED format), then [plotCorrelation](https://deeptools.readthedocs.io/en/develop/content/tools/plotCorrelation.html) can compute Pearson or [Spearman](https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient) correlation, and [plotPCA](https://deeptools.readthedocs.io/en/develop/content/tools/plotPCA.html) can compute PCA.
 
-#### Consensus of peaks
+#### Consensus of Peaks
 
 [bedtools](https://bedtools.readthedocs.io/en/latest/) is a versatile tool for BED file operations—consult the manual for specific commands based on your application.
 
 ```
 # intersect >1 BED files
 ## check the option from manual
-bedtools intersect -a file1.bed -b file2.bed file2.bed
+bedtools intersect -a file1.bed -b file2.bed file3.bed
 
 # merge overlapping intervels
 ## two regions less than 150 bp apart will be merged
@@ -224,7 +286,7 @@ plotHeatmap -m matrix.gz -o heatmap.png
 ## Part 4 - Downstream Analysis 
 
 The specific downstream analysis depends on the biological questions you want to answer. Below are some common approaches:
-### Step 1 - Differential enrichment analysis
+### Step 1 - Differential Enrichment Analysis
 
 A frequent goal is to compare **differential enrichment** between datasets. For example:
 
@@ -233,7 +295,7 @@ A frequent goal is to compare **differential enrichment** between datasets. For 
 
 The most straightforward way is use the (spike-in normalised) BigWig files, and again `deepTools`. 
 
-#### Compare 2 BigWig files
+#### Compare 2 BigWig Files
 
 [`bigwigCompare`](https://deeptools.readthedocs.io/en/develop/content/tools/bigwigCompare.html) from deepTools is ideal for comparing two BigWig files. It supports multiple comparison methods, and the output can be:
 
@@ -245,8 +307,8 @@ bigwigCompare -b1 sample1.bw -b2 sample2.bw -o log2.bw
 ```
 This computes the log2 fold-change (or other metrics) between two datasets.
 
-#### Analyze Multiple BigWig Signals
-To summarize signal across multiple BigWig files, use [`multiBigwigSummary`](https://deeptools.readthedocs.io/en/develop/content/tools/multiBigwigSummary.html). It allows you to calculate enrichment across:
+#### Analyse Multiple BigWig Signals
+To summarise signal across multiple BigWig files, use [`multiBigwigSummary`](https://deeptools.readthedocs.io/en/develop/content/tools/multiBigwigSummary.html). It allows you to calculate enrichment across:
 
 1. A **binned genome** (default).
 2. **Pre-defined regions** in a BED file.
@@ -271,7 +333,7 @@ Here using `deepTools` we can process the BAM/BW files into matrices (Dim $X_{sa
 Many tools developed for ChIP-seq can also be applied here, including:
 - [**DiffBind**](https://bioconductor.org/packages/release/bioc/html/DiffBind.html)**:** A Bioconductor package for analyzing differential binding patterns.
 - bdgdiff **from** [**MACS3**](https://macs3-project.github.io/MACS/docs/bdgdiff.html)**:** For comparing signal between samples to identify differential regions.
-### Step 2 - Identifying combinatorial patterns
+### Step 2 - Identifying Combinatorial Patterns
 
 As we know, combinatorial histone modifications can mark functional regions, like promoter/enhancers etc. How do we identify the combinatorial regions?
 
@@ -292,7 +354,7 @@ Here the options are:
 - `--outFileNameMatrix`: Outputs the clustered matrix, which can be used for further analysis.
 
 [`computeMatrix`](https://deeptools.readthedocs.io/en/develop/content/tools/computeMatrix.html) also somewhat calculate the score per region, but it further bins the region into smaller sub-regions (default: 10bp, adjustable), creating a matrix of dimensions: $X_{samples}, Y_{regions*bins}$. Again this matrix can also be handled by any programming language. 
-### Step 3 - Functional annotation 
+### Step 3 - Functional Annotation 
 
 Peak files (in BED format) can be functionally annotated to determine their genomic context (e.g., promoter, enhancer, intron, intergenic regions). Tools like [ChIPseeker](https://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html) provide an R interface for efficient functional annotation using genomic databases.
 
