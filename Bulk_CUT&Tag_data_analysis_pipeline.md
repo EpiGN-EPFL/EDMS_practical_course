@@ -55,7 +55,7 @@ Other tools like [**Sambamba**](https://lomereiter.github.io/sambamba/) can also
 
 To visualise alignment results, BAM files can be loaded into tools like [IGV](https://www.igv.org) (Integrated Genomics Viewer). 
 
-![[NEUROD2_45d_3histones_peak_zoom.png]]
+![[BAM.png]]
 
 **Important:** Ensure you select the correct reference genome before loading. Zooming in on the IGV interface allows inspection of nucleotide sequences, mapping quality, and other alignment details.
 
@@ -100,6 +100,10 @@ Here the options are:
 - `-g hs`: Genome size (e.g., human: hs, mouse: mm).
 - `--broad-cutoff 0.1`: Broad peak threshold for significance.
 - `--nolambda`: Recommended for peak calling without control sample. 
+
+We can visualise the BigWig files and peaks in IGV:
+
+![[BW_BED.png]]
 
 ---
 ## Part 1 & 2 - snakePipes
@@ -226,8 +230,13 @@ plotHeatmap -m matrix.gz -o heatmap.png
 - Output: The heatmap visualizes how well the peaks correspond to expected signals.
 	- For example, regions enriched with **H3K27me3** should exhibit low **H3K27ac** signals.
 
-If the heatmap reveals inconsistencies or unexpected results, consider performing the following QC checks
-  
+Note that `computeMatrix` comes in two flavours as shown in the figure below:
+- `reference-point`(left): all TSS/TES/center of regions in BED files are positioned at *peak*
+- `scale-regions`(right), all regions in the BED file are stretched or shrunken to the same length from *TSS* to *TES*
+
+![[deepTools_heatmap.png]]
+
+If the heatmap reveals inconsistencies or unexpected results, consider performing the following QC checks:
 ### Step 2 - QC and Troubleshooting
 
 #### Fraction of Reads in Peaks ([FRiP](https://www.encodeproject.org/data-standards/terms/#enrichment))
@@ -256,6 +265,11 @@ plotPCA -in results.npz -o pca.png
 ```
 Essentially [multiBamSummary](https://deeptools.readthedocs.io/en/develop/content/tools/multiBamSummary.html) or [multiBigwigSummary](https://deeptools.readthedocs.io/en/develop/content/tools/multiBigwigSummary.html) calculates the coverage on a binned genome or a given region (in BED format), then [plotCorrelation](https://deeptools.readthedocs.io/en/develop/content/tools/plotCorrelation.html) can compute Pearson or [Spearman](https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient) correlation, and [plotPCA](https://deeptools.readthedocs.io/en/develop/content/tools/plotPCA.html) can compute PCA.
 
+Here is an example of *ex-vivo* Xenopus laevis cultured in 96-well or air-liquid-interface (ALI):
+- left: Pearson's correlation of BigWig files on 1000bp binned genome.
+- right: PCA of different experiment samples (re-plotted in Python).
+
+![[sample_cor.png]]
 #### Consensus of Peaks
 
 [bedtools](https://bedtools.readthedocs.io/en/latest/) is a versatile tool for BED file operations—consult the manual for specific commands based on your application.
