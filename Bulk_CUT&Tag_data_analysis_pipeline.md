@@ -1,6 +1,6 @@
 The data processing and analysis outline is here:
-<img src="bulk_Cut&Tag_flowchart.png" align="centre" /><br/><br/>
-![[bulk_Cut&Tag_flowchart.png]]
+<img src="img/bulk_Cut&Tag_flowchart.png" align="centre" /><br/><br/>
+
 ## Step 0 - Quality Control 
 
 Assuming we already have the FASTQ files from the sequencing facility, what can we do with the data?
@@ -55,7 +55,7 @@ Other tools like [**Sambamba**](https://lomereiter.github.io/sambamba/) can also
 
 To visualise alignment results, BAM files can be loaded into tools like [IGV](https://www.igv.org) (Integrated Genomics Viewer). 
 
-![[BAM.png]]
+<img src="img/BAM.png" align="centre" /><br/><br/>
 
 **Important:** Ensure you select the correct reference genome before loading. Zooming in on the IGV interface allows inspection of nucleotide sequences, mapping quality, and other alignment details.
 
@@ -103,7 +103,7 @@ Here the options are:
 
 We can visualise the BigWig files and peaks in IGV:
 
-![[BW_BED.png]]
+<img src="img/BW_BED.png" align="centre" /><br/><br/>
 
 ---
 ## Part 1 & 2 - snakePipes
@@ -234,7 +234,7 @@ Note that `computeMatrix` comes in two flavours as shown in the figure below:
 - `reference-point`(left): all TSS/TES/center of regions in BED files are positioned at *peak*
 - `scale-regions`(right), all regions in the BED file are stretched or shrunken to the same length from *TSS* to *TES*
 
-![[deepTools_heatmap.png]]
+<img src="img/deepTools_heatmap.png" align="centre" /><br/><br/>
 
 If the heatmap reveals inconsistencies or unexpected results, consider performing the following QC checks:
 ### Step 2 - QC and Troubleshooting
@@ -269,7 +269,8 @@ Here is an example of *ex-vivo* Xenopus laevis cultured in 96-well or air-liquid
 - left: Pearson's correlation of BigWig files on 1000bp binned genome.
 - right: PCA of different experiment samples (re-plotted in Python).
 
-![[sample_cor.png]]
+<img src="img/sample_cor.png" align="centre" /><br/><br/>
+
 #### Consensus of Peaks
 
 [bedtools](https://bedtools.readthedocs.io/en/latest/) is a versatile tool for BED file operations—consult the manual for specific commands based on your application.
@@ -372,6 +373,9 @@ Here the options are:
 - `--outFileNameMatrix`: Outputs the clustered matrix, which can be used for further analysis.
 
 [`computeMatrix`](https://deeptools.readthedocs.io/en/develop/content/tools/computeMatrix.html) also somewhat calculate the score per region, but it further bins the region into smaller sub-regions (default: 10bp, adjustable), creating a matrix of dimensions: $X_{samples}, Y_{regions*bins}$. Again this matrix can also be handled by any programming language. 
+
+*TODO* give an example plot here
+
 ### Step 3 - Functional Annotation 
 
 Peak files (in BED format) can be functionally annotated to determine their genomic context (e.g., promoter, enhancer, intron, intergenic regions). Tools like [ChIPseeker](https://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html) provide an R interface for efficient functional annotation using genomic databases.
@@ -407,6 +411,8 @@ summary_stats <- peakAnno@annoStat  # Summary of genomic annotation
 For additional or complementary annotation, consider these tools: 
 - [**HOMER**](http://homer.ucsd.edu/homer/)**:** For motif enrichment and functional annotation.
 - [**GREAT**](http://great.stanford.edu/public/html/)**:** For associating non-coding genomic regions with regulatory functions.
+
+*TODO* Give an example plot here
 
 ### (Optional) Advanced Functional Annotation with ChromHMM
 
