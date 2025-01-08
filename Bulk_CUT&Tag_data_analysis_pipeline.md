@@ -62,8 +62,15 @@ To visualise alignment results, BAM files can be loaded into tools like [IGV](ht
 While BAM files retain detailed information, they are still large. To make them smaller and more manageable, we can convert BAM files to **BigWig** format (a type of coverage file) using [`bamCoverage`](https://deeptools.readthedocs.io/en/develop/content/tools/bamCoverage.html) command from `deepTools`.
 
 ```
-bamCoverage -b reads.bam -o coverage.bw
+bamCoverage -b reads.bam -o coverage.bw \
+	-p max/2 --binSize 25 --normalizeUsing RPKM --ignoreDuplicates
 ```
+
+Here we use some options (check the manual page for more):
+- `-p`: The number of processors to use. 
+- `--binSize`:Size of the bins for the output of the bigwig/bedgraph file.
+- `--normalizeUsing`: Use one of the entered methods to normalize the number of reads per bin. By default, no normalisation is performed. RPKM = Reads Per Kilobase per Million mapped reads.
+- `--ignoreDuplicates`: If set, reads that have the same orientation and start position will be considered only once.
 
 #### (optional) Spike-in Normalisation. 
 
