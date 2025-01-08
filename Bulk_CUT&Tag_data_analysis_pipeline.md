@@ -1,6 +1,6 @@
 The data processing and analysis outline is here:
 <img src="bulk_Cut&Tag_flowchart.png" align="centre" /><br/><br/>
-
+![[bulk_Cut&Tag_flowchart.png]]
 ## Step 0 - Quality Control 
 
 Assuming we already have the FASTQ files from the sequencing facility, what can we do with the data?
@@ -53,7 +53,11 @@ Other tools like [**Sambamba**](https://lomereiter.github.io/sambamba/) can also
 
 ### Step 1 - Generating Coverage Files 
 
-To visualise alignment results, BAM files can be loaded into tools like [IGV](https://www.igv.org) (Integrated Genomics Viewer). **Important:** Ensure you select the correct reference genome before loading. Zooming in on the IGV interface allows inspection of nucleotide sequences, mapping quality, and other alignment details.
+To visualise alignment results, BAM files can be loaded into tools like [IGV](https://www.igv.org) (Integrated Genomics Viewer). 
+
+![[NEUROD2_45d_3histones_peak_zoom.png]]
+
+**Important:** Ensure you select the correct reference genome before loading. Zooming in on the IGV interface allows inspection of nucleotide sequences, mapping quality, and other alignment details.
 
 While BAM files retain detailed information, they are still large. To make them smaller and more manageable, we can convert BAM files to **BigWig** format (a type of coverage file) using [`bamCoverage`](https://deeptools.readthedocs.io/en/develop/content/tools/bamCoverage.html) command from `deepTools`.
 
