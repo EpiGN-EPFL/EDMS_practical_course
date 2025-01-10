@@ -103,7 +103,7 @@ Many genomic databases and tools provide R interfaces, making R a powerful envir
 1. [ChIPseeker](https://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html) for functional annotation.
 2. [UpSetR](https://github.com/hms-dbmi/UpSetR) for visualization.
 
-Additionally, we will use the genomic annotation database [TxDb.Hsapiens.UCSC.hg38.knownGene](https://www.bioconductor.org/packages/release/data/annotation/html/TxDb.Hsapiens.UCSC.hg38.knownGene.html).
+Additionally, we will use the genomic annotation database [TxDb.Hsapiens.UCSC.hg38.knownGene](https://www.bioconductor.org/packages/release/data/annotation/html/TxDb.Hsapiens.UCSC.hg38.knownGene.html), and [org.Hs.eg.db](https://bioconductor.org/packages/release/data/annotation/html/org.Hs.eg.db.html)
 
 ```
 # ChIPseeker
@@ -116,6 +116,7 @@ install.packages("UpSetR")
 
 # Annotation database 
 BiocManager::install("TxDb.Hsapiens.UCSC.hg38.knownGene")
+BiocManager::install("org.Hs.eg.db")
 ```
 **(Optional)** Bioconductor provides a wide range of annotation databases for various species and genome versions. You can explore them here: [R Annotation Databases](https://bioconductor.org/packages/3.20/data/annotation/).
 
