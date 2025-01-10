@@ -427,12 +427,12 @@ plotAnnoBar(CnT.anno)
 
 An example plot is here:
 
+<img src="img/chipseeker.png" align="centre" /><br/><br/>
 
 For additional or complementary annotation, consider these tools: 
 - [**HOMER**](http://homer.ucsd.edu/homer/)**:** For motif enrichment and functional annotation.
 - [**GREAT**](http://great.stanford.edu/public/html/)**:** For associating non-coding genomic regions with regulatory functions.
 
-*TODO* Give an example plot here
 
 ### (Optional) Advanced Functional Annotation with ChromHMM
 
