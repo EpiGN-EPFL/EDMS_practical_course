@@ -404,18 +404,29 @@ library(ChIPseeker)
 library(GenomicRanges)
 library(org.Hs.eg.db)  # Annotation database for human
 
-# Read BED file and convert to GRanges object
-bed <- read.csv("CnT.peak", stringsAsFactors = FALSE, sep = '\t')
-peak.gr <- GRanges(seqnames=bed$chrom, ranges=IRanges(start=bed$start, end=bed$end))
+# Specify the TxDb object correctly
+txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 
-# Annotate peaks
-peakAnno <- annotatePeak(peak.gr, tssRegion=c(-3000, 3000),
-                         TxDb=txdb, annoDb="org.Hs.eg.db")
+# Read peaks
+CnT.peaks <- list.files("../peaks/",full.names=TRUE, pattern = '.bed') 
 
-# Access the results
-anno_df <- as.data.frame(peakAnno)  # Annotated peaks as a data frame
-summary_stats <- peakAnno@annoStat  # Summary of genomic annotation
+# Extract file names without the path and extension
+peak_names <- tools::file_path_sans_ext(basename(CnT.peaks))
+
+# Convert to GRanges object and assign names
+CnT.gr <- setNames(lapply(CnT.peaks, readPeakFile), peak_names)
+
+# Annotate 
+CnT.anno <- lapply(CnT.gr, function(peak.gr){
+  annotatePeak(peak.gr, tssRegion = c(-3000, 3000), TxDb = txdb, annoDb = "org.Hs.eg.db") 
+})
+
+# Plot the stats
+plotAnnoBar(CnT.anno)
 ```
+
+An example plot is here:
+
 
 For additional or complementary annotation, consider these tools: 
 - [**HOMER**](http://homer.ucsd.edu/homer/)**:** For motif enrichment and functional annotation.
