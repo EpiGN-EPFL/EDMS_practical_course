@@ -24,8 +24,10 @@ conda create -n epign_practical -c bioconda -c conda-forge macs3
 conda activate epign_practical
 
 # Then install deepTools via pip
-pip install deeptools
+pip install git+https://github.com/deeptools/deepTools.git@develop
 ```
+
+**Tips:** there are some small bugs in the release version so we install the development version here.
 
 Then we can check the package installation:
 

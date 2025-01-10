@@ -381,8 +381,9 @@ Here the options are:
 
 [`computeMatrix`](https://deeptools.readthedocs.io/en/develop/content/tools/computeMatrix.html) also somewhat calculate the score per region, but it further bins the region into smaller sub-regions (default: 10bp, adjustable), creating a matrix of dimensions: $X_{samples}, Y_{regions*bins}$. Again this matrix can also be handled by any programming language. 
 
-*TODO* give an example plot here
+Here is an example of the clustering analysis (H3K27me3, H3K27ac and H3K4me3):
 
+![[deepTools_heatmap_kmeans.png]]
 ### Step 3 - Functional Annotation 
 
 Peak files (in BED format) can be functionally annotated to determine their genomic context (e.g., promoter, enhancer, intron, intergenic regions). Tools like [ChIPseeker](https://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html) provide an R interface for efficient functional annotation using genomic databases.
