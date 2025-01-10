@@ -383,7 +383,8 @@ Here the options are:
 
 Here is an example of the clustering analysis (H3K27me3, H3K27ac and H3K4me3):
 
-![[deepTools_heatmap_kmeans.png]]
+<img src="img/deepTools_heatmap_kmeans.png" align="centre" /><br/><br/>
+
 ### Step 3 - Functional Annotation 
 
 Peak files (in BED format) can be functionally annotated to determine their genomic context (e.g., promoter, enhancer, intron, intergenic regions). Tools like [ChIPseeker](https://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html) provide an R interface for efficient functional annotation using genomic databases.
