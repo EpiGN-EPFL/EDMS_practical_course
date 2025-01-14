@@ -96,7 +96,7 @@ BigWig files loaded into IGV display histograms with wave-like patterns, corresp
 
 There are again many computational tools out there for peak calling, such as [MACS3](https://github.com/macs3-project/MACS) and [SEACR](https://seacr.fredhutch.org/). Even though many of them are initially developed for ChIP-seq, by adjusting parameters, they can be adapted to ATAC-seq/ CUT&Tag-seq. An example could be:
 ```
-macs3 callpeak -t reads.bam -f BAM --broad -g hs \
+macs3 callpeak -t reads.bam -f BAM --broad -g hs -n name\
 	--outdir MACS3_broad_peaks -B --broad-cutoff 0.1 --nolambda
 ```
 
