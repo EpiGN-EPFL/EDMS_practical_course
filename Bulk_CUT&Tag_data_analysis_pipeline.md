@@ -254,16 +254,16 @@ A high signal-to-noise ratio should result in a significant fraction of reads ma
 awk 'BEGIN{FS=OFS="\t"; print "GeneID\tChr\tStart\tEnd\tStrand"}{print $4, $1, $2+1, $3, "."}' peaks.bed > peaks.saf
 	
 # featureCounts
-featureCounts -p -a eaks.saf -F SAF -o readCountInPeaks.txt reads.bam
+featureCounts -p -a peaks.saf -F SAF -o readCountInPeaks.txt reads.bam
 ```
 **Note:** SAF uses 1-based coordinates, while BED is 0-based. The awk command adjusts this difference.
 #### Replicates Correlation
 To check for outliers among replicates, calculate correlations using deepTools:
 ```
 # from BAM files
-multiBamSummary bins --bamfiles file1.bam file2.bam -o results.npz
+multiBamSummary bins --bamfiles file1.bam file2.bam -o results.npz -p max/2
 # from BW files
-multiBigwigSummary bins -b file1.bw file2.bw -o results.npz
+multiBigwigSummary bins -b file1.bw file2.bw -o results.npz -p max/2
 
 # calculate spearman correlation
 plotCorrelation -in results.npz -c spearman -p heatmap -o cor_plot.png
@@ -289,7 +289,7 @@ bedtools intersect -a file1.bed -b file2.bed file3.bed
 
 # merge overlapping intervels
 ## two regions less than 150 bp apart will be merged
-bedtools merge –i file.bed –d 150 
+bedtools sort –i file.bed | bedtools merge –d 150 
 ```
 Evaluate whether peaks are:
 
@@ -302,7 +302,7 @@ Evaluate whether peaks are:
 Alternatively, a quick to check if the data make senses is to `plotHeatmap` on a given region, like transcription start site (TSS), enhancer regions or any the regions we are interested in. This way we can check the data quality without relying on our own peak calling. 
 
 ```
-computeMatrix scale-region -S coverage.bigwig -R TSS.bed -o matrix.gz
+computeMatrix scale-regions -S coverage.bigwig -R TSS.bed -o matrix.gz -p max/2
 plotHeatmap -m matrix.gz -o heatmap.png
 ```
 
@@ -341,7 +341,8 @@ To summarise signal across multiple BigWig files, use [`multiBigwigSummary`](htt
 
 ```
 # Signal of each BW on binned genome
-multiBigwigSummary bins -b file1.bw file2.bw \ # can be multiple bw
+## can be multiple bw
+multiBigwigSummary bins -b file1.bw file2.bw \
 	-o results.npz --outRawCounts results.tab
 		
 # Signal of each BW on pre-defined BED file
@@ -368,8 +369,8 @@ Now we know `multiBigwigSummary` can give us the matrix with scores per bin/regi
 ```
 computeMatrix scale-regions -S coverage.bigwig -R regions.bed -o matrix.gz
 plotHeatmap -m matrix.gz \
-	--kmeans 4 \ # other clustering algorithm possible 
-	--outFileSortedRegions heatmap_sortedRegions.bed \ # the cluster results
+	--kmeans 4 \
+	--outFileSortedRegions heatmap_sortedRegions.bed \
 	--outFileNameMatrix cluster_martrix.gz \
 	-o heatmap.png
 ```
